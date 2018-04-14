@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<WorldGenStepDef>
+		<defName>Speciality</defName>
+		<order>250</order>
+		<worldGenStep Class="RimEconmy.WorldGenStep_RimEconmy" />
+	</WorldGenStepDef>
+	<WorldObjectDef>
+		<defName>Speciality</defName>
+		<label>Speciality</label>
+		<worldObjectClass>RimEconmy.SpecialityWorldObject</worldObjectClass>
+		<description>This is especially rich in producing those things.</description>
+	</WorldObjectDef>
+	<GenStepDef>
+		<defName>Speciality</defName>
+		<linkWithMapGenerator>BasicMap</linkWithMapGenerator>
+		<order>1200</order>
+		<genStep Class="RimEconmy.GenStep_Speciality" />
+	</GenStepDef>
+</Defs>

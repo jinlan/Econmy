@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>RimEconmy</name>
+	<author>TW</author>
+	<targetVersion>0.18.0</targetVersion>
+	<description>
+		This mod support DeepRim mod. Please load this mod after DeepRim.\n
+		Requires HugsLib.
+	</description>
+</ModMetaData>
