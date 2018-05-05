@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
+		<operations>
+			<li Class="PatchOperationTest">
+				<xpath>/Defs/TraderKindDef/stockGenerators/li[Class="RimEconmy.StockGenerator_RimEconmy"]</xpath>
+				<success>Invert</success>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/TraderKindDef/stockGenerators</xpath>
+				<value>
+					<li Class="RimEconmy.StockGenerator_RimEconmy">
+					</li>
+				</value>
+			</li>
+		</operations>
+	</Operation>
+</Patch>

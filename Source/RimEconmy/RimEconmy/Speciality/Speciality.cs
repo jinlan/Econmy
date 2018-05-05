@@ -48,8 +48,9 @@ namespace RimEconmy {
             }
         }
 
-        public SpecialityWorldObject WorldObject;
+        private SpecialityWorldObject WorldObject;
         private int tile;
+        private List<ThingDef> allProductions;
 
         public Speciality(int tile, PawnKindDef animalBounus = null, ThingDef plantBounus = null, ThingDef resourceRockBounus = null) {
             this.tile = tile;
@@ -64,6 +65,30 @@ namespace RimEconmy {
             ResourceRockSpeciality = resourceRockBounus;
         }
 
+        public List<ThingDef> getAllBounus() {
+            List<ThingDef> allThingDef = new List<ThingDef>();
+            if(animalSpeciality != null) {
+                allThingDef.Add(animalSpeciality.race);
+            }
+            if(plantSpeciality != null) {
+                allThingDef.Add(plantSpeciality);
+            }
+            if(resourceRockSpeciality != null) {
+                allThingDef.Add(resourceRockSpeciality);
+            }
+            return allThingDef;
+        }
+
+        public List<ThingDef> getAllProductions() {
+            if(allProductions == null) {
+                allProductions = new List<ThingDef>();
+                foreach(ThingDef specialityBounus in getAllBounus()) {
+                    allProductions.AddRange(getProduction(specialityBounus));
+                }
+            }
+            return allProductions;
+        }
+
         public void ExposeData() {
             Scribe_Values.Look<int>(ref tile, "tile");
             Scribe_Defs.Look<PawnKindDef>(ref animalSpeciality, "ab");
@@ -73,7 +98,41 @@ namespace RimEconmy {
         }
 
         public string GetUniqueLoadID() {
-            return tile.ToString();
+            return "speciality" + tile.ToString();
+        }
+
+        private List<ThingDef> getProduction(ThingDef from) {
+            List<ThingDef> allProduction = new List<ThingDef>();
+            if(from.race != null) {
+                if(from.race.meatDef != null) {
+                    allProduction.Add(from.race.meatDef);
+                }
+                if(from.race.useMeatFrom != null) {
+                    allProduction.Add(from.race.meatDef);
+                }
+                if(from.race.leatherDef != null) {
+                    allProduction.Add(from.race.leatherDef);
+                }
+                CompProperties_Milkable milkProp = from.GetCompProperties<CompProperties_Milkable>();
+                if(milkProp != null) {
+                    allProduction.Add(milkProp.milkDef);
+                }
+                CompProperties_Shearable shearProp = from.GetCompProperties<CompProperties_Shearable>();
+                if(shearProp != null) {
+                    allProduction.Add(shearProp.woolDef);
+                }
+            }
+            if(from.plant != null) {
+                if(from.plant.harvestedThingDef != null) {
+                    allProduction.Add(from.plant.harvestedThingDef);
+                }
+            }
+            if(from.building != null) {
+                if(from.building.mineableThing != null) {
+                    allProduction.Add(from.building.mineableThing);
+                }
+            }
+            return allProduction;
         }
     }
 }

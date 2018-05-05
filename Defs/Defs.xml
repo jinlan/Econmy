@@ -3,13 +3,15 @@
 	<WorldGenStepDef>
 		<defName>Speciality</defName>
 		<order>250</order>
-		<worldGenStep Class="RimEconmy.WorldGenStep_RimEconmy" />
+		<worldGenStep Class="RimEconmy.WorldGenStep_Speciality" />
 	</WorldGenStepDef>
 	<WorldObjectDef>
 		<defName>Speciality</defName>
 		<label>Speciality</label>
 		<worldObjectClass>RimEconmy.SpecialityWorldObject</worldObjectClass>
 		<description>This is especially rich in producing those things.</description>
+		<expandingIcon>true</expandingIcon>
+		<expandingIconPriority>5</expandingIconPriority>
 	</WorldObjectDef>
 	<GenStepDef>
 		<defName>Speciality</defName>

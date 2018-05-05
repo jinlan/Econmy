@@ -9,17 +9,26 @@ using HugsLib.Utils;
 
 namespace RimEconmy {
 
-    public class SpecialitiesWorldManager : WorldComponent {
+    public class SpecialityWorldManager : WorldComponent {
 
-        public const float Chance = 0.001f;
+        public const float ChanceAnimal = 0.001f;
+        public const float ChancePlant = 0.002f;
+        public const float ChanceResourceRock = 0.0005f;
+
         private Dictionary<int, Speciality> specialities;
 
-        public SpecialitiesWorldManager(World world) : base(world) {
+        public SpecialityWorldManager(World world) : base(world) {
         }
 
         public void generateFresh(string seed) {
+            float chanceAnimal;
+            float chancePlant;
+            float chanceResourceRock;
+            chanceAnimal = float.Parse(RimEconmy.SettingData["specialityChanceAnimal"].Value);
+            chancePlant = float.Parse(RimEconmy.SettingData["specialityChancePlant"].Value);
+            chanceResourceRock = float.Parse(RimEconmy.SettingData["specialityChanceResourceRock"].Value);
             if(specialities == null) {
-                specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 3 * Chance));
+                specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
             }
             Rand.Seed = GenText.StableStringHash(seed);
             List<Tile> tiles = Find.WorldGrid.tiles;
@@ -34,14 +43,10 @@ namespace RimEconmy {
                     PawnKindDef animalKindDef = null;
                     ThingDef plantDef = null;
                     ThingDef resourceRock = null;
-                    float chance;
-                    if(!float.TryParse(RimEconmy.SettingData["specialityChance"].Value, out chance)) {
-                        chance = Chance;
-                    }
-                    if(Rand.Chance(chance * biome.animalDensity)) {
+                    if(Rand.Chance(chanceAnimal * biome.animalDensity)) {
                         animalKindDef = biome.AllWildAnimals.RandomElementByWeight((PawnKindDef def) => biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average);
                     }
-                    if(Rand.Chance(chance * biome.plantDensity)) {
+                    if(Rand.Chance(chancePlant * biome.plantDensity)) {
                         IEnumerable<ThingDef> plants = null;
                         if(biomePlantCache.ContainsKey(biome)) {
                             plants = biomePlantCache[biome];
@@ -53,7 +58,7 @@ namespace RimEconmy {
                         }
                         plantDef = plants.RandomElementByWeight((ThingDef def) => biome.CommonalityOfPlant(def));
                     }
-                    if(Rand.Chance(chance)) {
+                    if(Rand.Chance(chanceResourceRock)) {
                         resourceRock = resourceRocks.RandomElementByWeight((ThingDef def) => def.building.mineableScatterCommonality);
                     }
                     if(animalKindDef != null || plantDef != null || resourceRock != null) {
@@ -84,7 +89,7 @@ namespace RimEconmy {
             }
             if(Scribe.mode == LoadSaveMode.LoadingVars) {
                 if(specialities == null) {
-                    specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 3 * Chance));
+                    specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
                 }
                 for(int i = 0; i <= Find.WorldGrid.TilesCount - 1; i++) {
                     int key = 0;

@@ -5,37 +5,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Languages\English\Translate.xml">
-    <Files>
-      <File FileName="Languages\English\Translate.xml" Line="1" Column="1" />
-    </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="RimEconmy" expanded="True">
-            <Node name="RimEconmy" expanded="True">
-              <Node name="References" expanded="True" />
-              <Node name="About" expanded="True" />
-              <Node name="Assemblies" expanded="True" />
-              <Node name="Defs" expanded="True" />
-              <Node name="Languages" expanded="True">
-                <Node name="English" expanded="True">
-                  <Node name="Translate.xml" selected="True" />
-                </Node>
-              </Node>
-              <Node name="Patches" expanded="True">
-                <Node name="DeepRim" expanded="True" />
-              </Node>
-              <Node name="RimEconmy" expanded="True">
-                <Node name="internal" expanded="True" />
-                <Node name="Speciality" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MultiItemStartupConfigurations>
     <MultiItemSolutionRunConfiguration Id="Default" Name="Default" />
     <MultiItemSolutionRunConfiguration Id="rimworld" Name="rimworld" />

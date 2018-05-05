@@ -7,10 +7,10 @@ using RimWorld;
 
 namespace RimEconmy {
 
-    public class WorldGenStep_RimEconmy : WorldGenStep {
+    public class WorldGenStep_Speciality : WorldGenStep {
 
         public override void GenerateFresh(string seed) {
-            SpecialitiesWorldManager mapBounusWorldManager = Find.World.GetComponent<SpecialitiesWorldManager>();
+            SpecialityWorldManager mapBounusWorldManager = Find.World.GetComponent<SpecialityWorldManager>();
             mapBounusWorldManager.generateFresh(seed);
         }
 

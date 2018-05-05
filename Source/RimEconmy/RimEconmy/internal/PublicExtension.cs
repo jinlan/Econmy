@@ -63,5 +63,12 @@ namespace RimEconmy {
             }
             return num;
         }
+        public class CompareFloat : IComparer<float> {
+            int IComparer<float>.Compare(float x, float y) {
+                if(x > y) return 1;
+                else if(x < y) return -1;
+                else return 0;
+            }
+        }
     }
 }
