@@ -1,3 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Language>
+	<!--ZoneAddProductions>Productions</ZoneAddProductions>
+	<ZoneAddProductionsDesc>
+		Put all your productions for sell in this place. The more you successfully sold, the higher chance AI will send more caravans.
+	</ZoneAddProductionsDesc-->
 </Language>

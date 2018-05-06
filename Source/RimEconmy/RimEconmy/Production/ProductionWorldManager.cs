@@ -13,7 +13,7 @@ namespace RimEconmy {
         public static ProductionWorldManager singleton;
         private static IEnumerable<ThingDef> allManufactored;
 
-        private Dictionary<Settlement, List<Thing>> productionLists;
+        private Dictionary<Settlement, Dictionary<Thing, float>> productionLists;
         private Dictionary<Settlement, List<Speciality>> specialityLists;
 
         static ProductionWorldManager() {
@@ -21,7 +21,7 @@ namespace RimEconmy {
         }
 
         public ProductionWorldManager() {
-            productionLists = new Dictionary<Settlement, List<Thing>>();
+            productionLists = new Dictionary<Settlement, Dictionary<Thing, float>>();
             specialityLists = new Dictionary<Settlement, List<Speciality>>();
         }
         public List<ThingDef> getRawMaterials() {
@@ -50,11 +50,10 @@ namespace RimEconmy {
                 return new List<Thing>();
             }
             if(productionLists.ContainsKey(settlement)) {
-                return productionLists[settlement];
+                return shuffleProductionList(productionLists[settlement]);
             }
-            List<Thing> list = new List<Thing>();
             if(getSpecialityList().Count == 0) {
-                return list;
+                return new List<Thing>();
             }
             List<ThingDef> materialList = getRawMaterials();
             TechLevel baseTech = settlement.Faction.def.techLevel;
@@ -64,10 +63,8 @@ namespace RimEconmy {
                                   select thingDef;
             }
             Dictionary<Thing, float> productionListWithOrder = new Dictionary<Thing, float>();
-            ModLogger logger = new ModLogger("production generating: " + settlement.TraderName);
             foreach(ThingDef production in allManufactored) {
                 if(production.techLevel <= baseTech) {
-                    logger.Message("start check: " + production.label);
                     int matchingIngredient = 0;
                     int ingredientTypeCount = 0;
                     ThingDef productionStuff = null;
@@ -75,17 +72,14 @@ namespace RimEconmy {
                         foreach(ThingCountClass cost in production.costList) {
                             if(materialList.Contains(cost.thingDef)) {
                                 matchingIngredient++;
-                                logger.Message("costList check success: " + cost.thingDef.label);
                             }
                             ingredientTypeCount++;
                         }
                     }
                     if(production.MadeFromStuff) {
-                        logger.Message("start check stuff");
                         if(materialList.Any((ThingDef material) => {
                             if(material.stuffProps != null && material.stuffProps.CanMake(production)) {
                                 productionStuff = material;
-                                logger.Message("stuff check success: " + production.label);
                                 return true;
                             }
                             return false;
@@ -97,21 +91,13 @@ namespace RimEconmy {
                     if(matchingIngredient > 0) {
                         if(production.MadeFromStuff && productionStuff == null) {
                             productionStuff = GenStuff.RandomStuffFor(production);
-                            logger.Message("adding: " + production.label + " stuff: " + productionStuff.label);
-                        } else {
-                            logger.Message("adding: " + production.label);
                         }
                         productionListWithOrder[ThingMaker.MakeThing(production, productionStuff)] = matchingIngredient / ingredientTypeCount;
                     }
                 }
             }
-            list = productionListWithOrder.OrderByDescending((KeyValuePair<Thing, float> kvp) => {
-                return kvp.Value;
-            }, new PublicExtension.CompareFloat()).Select((KeyValuePair<Thing, float> arg) => arg.Key).ToList();
-            productionLists[settlement] = list;
-            logger.Message("dumping list");
-            logger.Trace(list);
-            return list;
+            productionLists[settlement] = productionListWithOrder;
+            return shuffleProductionList(productionLists[settlement]);
         }
         public List<Speciality> getSpecialityList() {
             Settlement settlement = TradeSession.trader as Settlement;
@@ -128,25 +114,30 @@ namespace RimEconmy {
                 WorldPathFinder finder = Find.WorldPathFinder;
                 SpecialityWorldManager specialityWorldManager = Find.World.GetComponent<SpecialityWorldManager>();
                 finder.FloodPathsWithCost(new List<int> { settlement.Tile }, (int currentPlace, int neighborPlace) => {
+                    float moveCost = 2500;
                     Tile tile = grid.tiles[neighborPlace];
-                    if(tile == null) {
+                    if(tile == null && tile.WaterCovered) {
                         return 99999;
                     }
                     Season season = GenDate.Season(Find.TickManager.TicksGame, grid.LongLatOf(neighborPlace));
                     switch(season) {
                     case Season.Spring:
-                        return tile.biome.pathCost_spring + 2500;
+                        moveCost += tile.biome.pathCost_spring;
+                        break;
                     case Season.Summer:
                     case Season.PermanentSummer:
-                        return tile.biome.pathCost_summer + 2500;
+                        moveCost += tile.biome.pathCost_summer;
+                        break;
                     case Season.Fall:
-                        return tile.biome.pathCost_fall + 2500;
+                        moveCost += tile.biome.pathCost_fall;
+                        break;
                     case Season.Winter:
                     case Season.PermanentWinter:
-                        return tile.biome.pathCost_winter + 2500;
+                        moveCost += tile.biome.pathCost_winter;
+                        break;
                     }
-                    Log.Error("can't get a season");
-                    return 99999;
+                    moveCost *= grid.GetRoadMovementMultiplierFast(currentPlace, neighborPlace);
+                    return (int)moveCost;
                 }, null, (int currentPlace, float cost) => {
                     if(cost <= ticksPerDay) {
                         Speciality speciality = specialityWorldManager.getSpeciality(currentPlace);
@@ -161,6 +152,9 @@ namespace RimEconmy {
                 specialityLists[settlement] = specialityList;
             }
             return specialityList;
+        }
+        private List<Thing> shuffleProductionList(Dictionary<Thing, float> listWithWeight) {
+            return listWithWeight.OrderByDescending((KeyValuePair<Thing, float> kvp) => kvp.Value, new PublicExtension.CompareFloat()).ThenBy((KeyValuePair<Thing, float> kvp) => kvp.Key, new PublicExtension.randomOrder<Thing>()).Select((KeyValuePair<Thing, float> arg) => arg.Key).ToList();
         }
     }
 }

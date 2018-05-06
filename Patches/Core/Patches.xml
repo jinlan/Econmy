@@ -16,4 +16,11 @@
 			</li>
 		</operations>
 	</Operation>
+	<!--Operation Class="PatchOperationAdd">
+		<xpath>/Defs/DesignationCategoryDef/specialDesignatorClasses</xpath>
+		<value>
+			<li Class="RimEconmy.Designator_ZoneAddStockpile_Production">
+			</li>
+		</value>
+	</Operation-->
 </Patch>

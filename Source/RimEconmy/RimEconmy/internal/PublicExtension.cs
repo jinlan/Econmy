@@ -63,11 +63,25 @@ namespace RimEconmy {
             }
             return num;
         }
+
         public class CompareFloat : IComparer<float> {
             int IComparer<float>.Compare(float x, float y) {
                 if(x > y) return 1;
                 else if(x < y) return -1;
                 else return 0;
+            }
+        }
+        public class randomOrder<T> : IComparer<T> {
+            private readonly Dictionary<T, float> randomValues = new Dictionary<T, float>();
+            private readonly IComparer<float> floatComparer = new CompareFloat();
+            int IComparer<T>.Compare(T x, T y) {
+                if(!randomValues.ContainsKey(x)) {
+                    randomValues[x] = Rand.Value;
+                }
+                if(!randomValues.ContainsKey(y)) {
+                    randomValues[y] = Rand.Value;
+                }
+                return floatComparer.Compare(randomValues[x], randomValues[y]);
             }
         }
     }
