@@ -25,6 +25,8 @@ namespace RimEconmy {
                 }
             }
         }
+
+
         public ThingDef PlantSpeciality {
             get {
                 return plantSpeciality;
@@ -54,12 +56,10 @@ namespace RimEconmy {
 
         public Speciality(int tile, PawnKindDef animalBounus = null, ThingDef plantBounus = null, ThingDef resourceRockBounus = null) {
             this.tile = tile;
-            if(!Find.WorldObjects.AnyWorldObjectAt(tile)) {
-                SpecialityWorldObject worldObject = (SpecialityWorldObject)WorldObjectMaker.MakeWorldObject(SpecialityWorldObjectDefOf.Speciality);
-                worldObject.Tile = tile;
-                Find.WorldObjects.Add(worldObject);
-                WorldObject = worldObject;
-            }
+            SpecialityWorldObject worldObject = (SpecialityWorldObject)WorldObjectMaker.MakeWorldObject(SpecialityWorldObjectDefOf.Speciality);
+            worldObject.Tile = tile;
+            Find.WorldObjects.Add(worldObject);
+            WorldObject = worldObject;
             AnimalSpeciality = animalBounus;
             PlantSpeciality = plantBounus;
             ResourceRockSpeciality = resourceRockBounus;

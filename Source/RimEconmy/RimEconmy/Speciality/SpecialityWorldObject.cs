@@ -19,7 +19,13 @@ namespace RimEconmy {
         private ThingDef resourceRockDef;
 
         private Material mat;
-
+        /*
+        public override bool TransportPodsCanLandAndGenerateMap {
+            get {
+                return true;
+            }
+        }
+*/
         public override Material Material {
             get {
                 if(mat == null) {

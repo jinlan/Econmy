@@ -9,9 +9,10 @@
 		<defName>Speciality</defName>
 		<label>Speciality</label>
 		<worldObjectClass>RimEconmy.SpecialityWorldObject</worldObjectClass>
-		<description>This is especially rich in producing those things.</description>
+		<description>This place is especially rich in producing those things.</description>
 		<expandingIcon>true</expandingIcon>
 		<expandingIconPriority>5</expandingIconPriority>
+		<mapGenerator>BasicMap</mapGenerator>
 	</WorldObjectDef>
 	<GenStepDef>
 		<defName>Speciality</defName>

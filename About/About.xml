@@ -3,8 +3,18 @@
 	<name>RimEconmy</name>
 	<author>TW</author>
 	<targetVersion>0.18.0</targetVersion>
-	<description>
-		This mod support DeepRim mod. Please load this mod after DeepRim.\n
-		Requires HugsLib.
+	<description>RimEconmy
+RimEconmy is a rimworld mod that trying to add many econmy related feature to the game.
+
+speciality natural resource
+Every world tile has a chance to have a speciality when generated. Increasing animals, plants, resource rocks.
+
+production
+AI base will produce extra goods based on what and how many specialities they have near by.
+
+This mod support DeepRim mod. Please load this mod after DeepRim.
+The mod Set-up Camp doesn't support this mod. Set-up Camp mod doesn't allow to set up camp on any tile that has a world object, and speciality is world object. So you can't set up camp. It's pitty, but I can't solve that problem by my self. I have posted on Nandonalt's forum thread, We have to wait for some while though.
+&lt;color=orange&gt;&lt;b&gt;Requires HugsLib.\n&lt;/b&gt;&lt;/color&gt;
+version 1.0.0
 	</description>
 </ModMetaData>
