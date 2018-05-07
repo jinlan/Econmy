@@ -8,7 +8,7 @@ using HugsLib.Utils;
 
 namespace RimEconmy {
 
-    public class Speciality : ILoadReferenceable {
+    public class Speciality : ILoadReferenceable, IExposable {
 
         private PawnKindDef animalSpeciality;
         private ThingDef plantSpeciality;
@@ -94,7 +94,7 @@ namespace RimEconmy {
             Scribe_Defs.Look<PawnKindDef>(ref animalSpeciality, "ab");
             Scribe_Defs.Look<ThingDef>(ref plantSpeciality, "pb");
             Scribe_Defs.Look<ThingDef>(ref resourceRockSpeciality, "rr");
-            Scribe_Deep.Look<SpecialityWorldObject>(ref WorldObject, "wo");
+            Scribe_References.Look<SpecialityWorldObject>(ref WorldObject, "wo");
         }
 
         public string GetUniqueLoadID() {

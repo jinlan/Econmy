@@ -58,7 +58,7 @@ namespace RimEconmy {
         }
 
         public override void ExposeData() {
-            Scribe_Deep.Look<Speciality>(ref speciality, "sp");
+            Scribe_References.Look<Speciality>(ref speciality, "sp");
             if(Scribe.mode == LoadSaveMode.LoadingVars) {
                 readSetting();
             }

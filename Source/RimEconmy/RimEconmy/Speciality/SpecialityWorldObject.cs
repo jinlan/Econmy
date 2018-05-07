@@ -19,13 +19,7 @@ namespace RimEconmy {
         private ThingDef resourceRockDef;
 
         private Material mat;
-        /*
-        public override bool TransportPodsCanLandAndGenerateMap {
-            get {
-                return true;
-            }
-        }
-*/
+
         public override Material Material {
             get {
                 if(mat == null) {
@@ -39,6 +33,14 @@ namespace RimEconmy {
                 }
                 return mat;
             }
+        }
+
+        public override void ExposeData() {
+            base.ExposeData();
+            Scribe_Values.Look<string>(ref specialityLabels, "sl");
+            Scribe_Defs.Look<PawnKindDef>(ref animalKind, "ak");
+            Scribe_Defs.Look<ThingDef>(ref plantDef, "pd");
+            Scribe_Defs.Look<ThingDef>(ref resourceRockDef, "rrd");
         }
 
         public override void Draw() {
