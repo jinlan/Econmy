@@ -54,6 +54,8 @@ namespace RimEconmy {
         private int tile;
         private List<ThingDef> allProductions;
 
+        public Speciality() { }
+
         public Speciality(int tile, PawnKindDef animalBounus = null, ThingDef plantBounus = null, ThingDef resourceRockBounus = null) {
             this.tile = tile;
             SpecialityWorldObject worldObject = (SpecialityWorldObject)WorldObjectMaker.MakeWorldObject(SpecialityWorldObjectDefOf.Speciality);

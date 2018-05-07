@@ -18,6 +18,7 @@ namespace RimEconmy {
         private Dictionary<int, Speciality> specialities;
 
         public SpecialityWorldManager(World world) : base(world) {
+            specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
         }
 
         public void generateFresh(string seed) {
@@ -27,9 +28,6 @@ namespace RimEconmy {
             chanceAnimal = float.Parse(RimEconmy.SettingData["specialityChanceAnimal"].Value);
             chancePlant = float.Parse(RimEconmy.SettingData["specialityChancePlant"].Value);
             chanceResourceRock = float.Parse(RimEconmy.SettingData["specialityChanceResourceRock"].Value);
-            if(specialities == null) {
-                specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
-            }
             Rand.Seed = GenText.StableStringHash(seed);
             List<Tile> tiles = Find.WorldGrid.tiles;
             Dictionary<BiomeDef, IEnumerable<ThingDef>> biomePlantCache = new Dictionary<BiomeDef, IEnumerable<ThingDef>>();
@@ -76,31 +74,7 @@ namespace RimEconmy {
         }
 
         public override void ExposeData() {
-            if(Scribe.mode == LoadSaveMode.Saving) {
-                int i = 0;
-                foreach(KeyValuePair<int, Speciality> kvp in specialities) {
-                    int key = kvp.Key;
-                    Speciality speciality = kvp.Value;
-                    if(speciality != null) {
-                        Scribe_Values.Look<int>(ref key, "mbk" + i, 0, true);
-                        Scribe_Deep.Look<Speciality>(ref speciality, "mb" + i);
-                    }
-                }
-            }
-            if(Scribe.mode == LoadSaveMode.LoadingVars) {
-                if(specialities == null) {
-                    specialities = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
-                }
-                for(int i = 0; i <= Find.WorldGrid.TilesCount - 1; i++) {
-                    int key = 0;
-                    Speciality speciality = null;
-                    Scribe_Values.Look<int>(ref key, "mbk" + i, 0);
-                    Scribe_Deep.Look<Speciality>(ref speciality, "mb" + i);
-                    if(speciality != null) {
-                        specialities[key] = speciality;
-                    }
-                }
-            }
+            Scribe_Collections.Look<int, Speciality>(ref specialities, "sps", LookMode.Value, LookMode.Deep);
         }
     }
 }
