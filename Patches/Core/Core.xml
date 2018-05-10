@@ -15,21 +15,7 @@
 				</value>
 			</li>
 		</operations>
-	</Operation>
-	<Operation Class="PatchOperationSequence">
-		<success>Always</success>
-		<operations>
-			<li Class="PatchOperationTest">
-				<xpath>/Defs/WorldObjectDef[defName = "Caravan" and worldObjectClass = "Nandonalt_SetUpCamp.CaravanModded"]</xpath>
-			</li>
-			<li Class="PatchOperationReplace">
-				<xpath>/Defs/WorldObjectDef[defName = "Caravan" and worldObjectClass = "Nandonalt_SetUpCamp.CaravanModded"]/worldObjectClass</xpath>
-				<value>
-					<worldObjectClass>RimEconmy.Patches.SetUpCamp.SetUpCampCaravan</worldObjectClass>
-				</value>
-			</li>
-		</operations>
-	</Operation>
+	</Operation>   
 	<!--Operation Class="PatchOperationAdd">
 		<xpath>/Defs/DesignationCategoryDef/specialDesignatorClasses</xpath>
 		<value>

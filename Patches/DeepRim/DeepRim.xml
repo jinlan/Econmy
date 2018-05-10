@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationSequence">
+        <success>Always</success>
+        <operations>
+            <li Class="PatchOperationTest">
+                <xpath>/Defs/MapGeneratorDef[defName="DeepMap"]</xpath>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>/Defs</xpath>
+                <value>
+                    <GenStepDef>
+                        <defName>Speciality_DeepRim</defName>
+                        <linkWithMapGenerator>DeepMap</linkWithMapGenerator>
+                        <order>700</order>
+                        <genStep Class="RimEconmy.GenStep_Speciality" />
+                    </GenStepDef>
+                </value>
+            </li>
+        </operations>
+    </Operation>
+</Patch>

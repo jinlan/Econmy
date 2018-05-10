@@ -68,17 +68,20 @@
       <Link>Defs\Defs.xml</Link>
     </None>
     <None Include="Languages\English\Translate.xml" />
-    <None Include="..\..\Patches\DeepRim\Patches.xml">
-      <Link>Patches\DeepRim\Patches.xml</Link>
-    </None>
     <None Include="..\..\Assemblies\%24HugsLibChecker.dll">
       <Link>Assemblies\%24HugsLibChecker.dll</Link>
     </None>
     <None Include="..\..\README.md">
       <Link>README.md</Link>
     </None>
-    <None Include="..\..\Patches\Core\Patches.xml">
-      <Link>Patches\Core\Patches.xml</Link>
+    <None Include="..\..\Patches\Core\Core.xml">
+      <Link>Patches\Core\Core.xml</Link>
+    </None>
+    <None Include="..\..\Patches\DeepRim\DeepRim.xml">
+      <Link>Patches\DeepRim\DeepRim.xml</Link>
+    </None>
+    <None Include="..\..\Patches\Set-Up Camp\Set-Up Camp.xml">
+      <Link>Patches\Set-Up Camp\Set-Up Camp.xml</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +95,9 @@
     <Folder Include="RimEconmy\Production\" />
     <Folder Include="RimEconmy\Def\" />
     <Folder Include="RimEconmy\Patches\" />
+    <Folder Include="Patches\Set-Up Camp\" />
+    <Folder Include="Patches\Core\" />
+    <Folder Include="Patches\DeepRim\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
