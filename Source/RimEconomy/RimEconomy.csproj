@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FB4BB096-C495-45B9-AADE-7FA1B458BEFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>RimEconomy</RootNamespace>
+    <AssemblyName>RimEconomy</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Default|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType></DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Assemblies</OutputPath>
+    <DefineConstants></DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile></DocumentationFile>
+    <ConsolePause>false</ConsolePause>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HugsLib">
+      <HintPath>..\..\..\HugsLib\Assemblies\HugsLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\HugsLib\Assemblies\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="Nandonalt_SetUpCamp">
+      <HintPath>..\..\..\..\..\RimWorld\Mods\Nandonalt - Set-up Camp\Assemblies\Nandonalt_SetUpCamp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RimEconomy\Speciality\Speciality.cs" />
+    <Compile Include="RimEconomy\Speciality\SpecialityWorldManager.cs" />
+    <Compile Include="RimEconomy\Speciality\SpecialityMapManager.cs" />
+    <Compile Include="RimEconomy\internal\PublicExtension.cs" />
+    <Compile Include="RimEconomy\RimEconomy.cs" />
+    <Compile Include="RimEconomy\Production\StockGenerator_RimEconomy.cs" />
+    <Compile Include="RimEconomy\Production\ProductionWorldManager.cs" />
+    <Compile Include="RimEconomy\Def\GenStep_Speciality.cs" />
+    <Compile Include="RimEconomy\Def\WorldGenStep_Speciality.cs" />
+    <Compile Include="RimEconomy\Def\SpecialityWorldObjectDefOf.cs" />
+    <Compile Include="RimEconomy\Def\SpecialityWorldObject.cs" />
+    <Compile Include="RimEconomy\Patches\SetUpCampCaravan.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\About\About.xml">
+      <Link>About\About.xml</Link>
+    </None>
+    <None Include="..\..\Defs\Defs.xml">
+      <Link>Defs\Defs.xml</Link>
+    </None>
+    <None Include="Languages\English\Translate.xml" />
+    <None Include="..\..\Assemblies\%24HugsLibChecker.dll">
+      <Link>Assemblies\%24HugsLibChecker.dll</Link>
+    </None>
+    <None Include="..\..\README.md">
+      <Link>README.md</Link>
+    </None>
+    <None Include="..\..\Patches\Core\Core.xml">
+      <Link>Patches\Core\Core.xml</Link>
+    </None>
+    <None Include="..\..\Patches\DeepRim\DeepRim.xml">
+      <Link>Patches\DeepRim\DeepRim.xml</Link>
+    </None>
+    <None Include="..\..\Patches\Set-Up Camp\Set-Up Camp.xml">
+      <Link>Patches\Set-Up Camp\Set-Up Camp.xml</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RimEconomy\" />
+    <Folder Include="Assemblies\" />
+    <Folder Include="RimEconomy\Speciality\" />
+    <Folder Include="Languages\" />
+    <Folder Include="Languages\English\" />
+    <Folder Include="RimEconomy\internal\" />
+    <Folder Include="Patches\" />
+    <Folder Include="RimEconomy\Production\" />
+    <Folder Include="RimEconomy\Def\" />
+    <Folder Include="RimEconomy\Patches\" />
+    <Folder Include="Patches\Set-Up Camp\" />
+    <Folder Include="Patches\Core\" />
+    <Folder Include="Patches\DeepRim\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

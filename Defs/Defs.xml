@@ -3,12 +3,12 @@
 	<WorldGenStepDef>
 		<defName>Speciality</defName>
 		<order>250</order>
-		<worldGenStep Class="RimEconmy.WorldGenStep_Speciality" />
+		<worldGenStep Class="RimEconomy.WorldGenStep_Speciality" />
 	</WorldGenStepDef>
 	<WorldObjectDef>
 		<defName>Speciality</defName>
 		<label>Speciality</label>
-		<worldObjectClass>RimEconmy.SpecialityWorldObject</worldObjectClass>
+		<worldObjectClass>RimEconomy.SpecialityWorldObject</worldObjectClass>
 		<description>This place is especially rich in producing those things.</description>
 		<expandingIcon>true</expandingIcon>
 		<expandingIconPriority>5</expandingIconPriority>
@@ -18,6 +18,6 @@
 		<defName>Speciality</defName>
 		<linkWithMapGenerator>BasicMap</linkWithMapGenerator>
 		<order>1200</order>
-		<genStep Class="RimEconmy.GenStep_Speciality" />
+		<genStep Class="RimEconomy.GenStep_Speciality" />
 	</GenStepDef>
 </Defs>

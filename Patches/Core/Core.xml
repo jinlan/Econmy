@@ -4,18 +4,18 @@
 		<success>Always</success>
 		<operations>
 			<li Class="PatchOperationTest">
-				<xpath>/Defs/TraderKindDef/stockGenerators/li[Class="RimEconmy.StockGenerator_RimEconmy"]</xpath>
+				<xpath>/Defs/TraderKindDef/stockGenerators/li[Class="RimEconomy.StockGenerator_RimEconomy"]</xpath>
 				<success>Invert</success>
 			</li>
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/TraderKindDef/stockGenerators</xpath>
 				<value>
-					<li Class="RimEconmy.StockGenerator_RimEconmy">
+					<li Class="RimEconomy.StockGenerator_RimEconomy">
 					</li>
 				</value>
 			</li>
 		</operations>
-	</Operation>   
+	</Operation>
 	<!--Operation Class="PatchOperationAdd">
 		<xpath>/Defs/DesignationCategoryDef/specialDesignatorClasses</xpath>
 		<value>
