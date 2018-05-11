@@ -1,5 +1,5 @@
-# RimEconmy
-RimEconmy is a rimworld mod that trying to add many econmy related feature to the game.
+# RimEconomy
+RimEconomy is a rimworld mod that trying to add many economy related feature to the game.
 
 **speciality natural resource**
 Every world tile has a chance to have a speciality when generated. Increasing animals, plants, resource rocks.
