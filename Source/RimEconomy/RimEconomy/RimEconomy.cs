@@ -7,8 +7,6 @@ using Verse;
 namespace RimEconomy {
     public class RimEconomy : ModBase {
 
-        private const string Version = "0.1.0";
-
         public static Dictionary<string, SettingHandle<string>> SettingData;
 
         public RimEconomy() : base() {
@@ -17,7 +15,7 @@ namespace RimEconomy {
 
         public override string ModIdentifier {
             get {
-                return "RimEconmy";
+                return "RimEconomy";
             }
         }
         public override void DefsLoaded() {

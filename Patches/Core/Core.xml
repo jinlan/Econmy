@@ -3,10 +3,6 @@
 	<Operation Class="PatchOperationSequence">
 		<success>Always</success>
 		<operations>
-			<li Class="PatchOperationTest">
-				<xpath>/Defs/TraderKindDef/stockGenerators/li[Class="RimEconomy.StockGenerator_RimEconomy"]</xpath>
-				<success>Invert</success>
-			</li>
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/TraderKindDef/stockGenerators</xpath>
 				<value>
