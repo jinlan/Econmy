@@ -24,7 +24,7 @@ namespace RimEconomy {
 
         public static float DesiredTotalAnimalWeight(this WildSpawner wildSpawner, Map map) {
             float desiredAnimalDensity = wildSpawner.DesiredAnimalDensity(map);
-            if(desiredAnimalDensity == 0f) {
+            if(!(desiredAnimalDensity > 0f) && !(desiredAnimalDensity < 0f)) {
                 return 0f;
             }
             float num = 10000f / desiredAnimalDensity;

@@ -38,23 +38,25 @@ namespace RimEconomy {
         }
 
         private void reset() {
+            Settlement settlement = TradeSession.trader as Settlement;
+            RimEconomyWorldManager specialityWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
+            List<Speciality> specialityList = specialityWorldManager.getSettlementSpecialities(settlement);
             if(productionListWithoutQuantity == null) {
-                List<Thing> fullProductionList = ProductionWorldManager.singleton.getProductionList();
+                List<Thing> fullProductionList = specialityWorldManager.getSettlementProductionList(settlement);
                 productionListWithoutQuantity = fullProductionList.GetRange(0, Math.Max(Math.Min(5, fullProductionList.Count), (int)(Rand.Value * fullProductionList.Count)));
-                productionListWithoutQuantity.AddRange(ProductionWorldManager.singleton.getRawMaterials().ConvertAll((ThingDef input) => {
+                productionListWithoutQuantity.AddRange(specialityWorldManager.getSettlementRawMaterials(settlement).ConvertAll((ThingDef input) => {
                     if(input.race != null) {
-                        Speciality speciality = ProductionWorldManager.singleton.getSpecialityList().Find((Speciality obj) => obj.AnimalSpeciality != null && obj.AnimalSpeciality.race == input);
+                        Speciality speciality = specialityList.Find((Speciality obj) => obj.AnimalSpeciality != null && obj.AnimalSpeciality.race == input);
                         return PawnGenerator.GeneratePawn(speciality.AnimalSpeciality);
                     } else {
                         return ThingMaker.MakeThing(input);
                     }
                 }));
             }
-            Settlement settlement = TradeSession.trader as Settlement;
             if(settlement != null) {
                 maxTechLevelGenerate = settlement.Faction.def.techLevel;
             }
-            int countBounus = ProductionWorldManager.singleton.getSpecialityList().Aggregate(0, (int count, Speciality speciality) => count + speciality.getAllBounus().Count);
+            int countBounus = specialityList.Aggregate(0, (int count, Speciality speciality) => count + speciality.getAllBounus().Count);
             if(totalPriceRange == FloatRange.Zero) {
                 totalPriceRange = new FloatRange(1000 * countBounus, 2000 * countBounus);
             }

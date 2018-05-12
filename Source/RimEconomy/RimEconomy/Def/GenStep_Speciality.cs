@@ -8,11 +8,11 @@ namespace RimEconomy {
     public class GenStep_Speciality : GenStep {
 
         public override void Generate(Map map) {
-            SpecialityWorldManager specialitiesWorldManager = Find.World.GetComponent<SpecialityWorldManager>();
-            Speciality speciality = specialitiesWorldManager.getSpeciality(map.Tile);
+            RimEconomyWorldManager specialitiesWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
+            Speciality speciality = specialitiesWorldManager.getTileSpeciality(map.Tile);
             if(speciality != null) {
-                SpecialityMapManager specialityMapManager = map.GetComponent<SpecialityMapManager>();
-                specialityMapManager.Generate(speciality);
+                RimEconomyMapManager specialityMapManager = map.GetComponent<RimEconomyMapManager>();
+                specialityMapManager.GenerateMap(speciality);
             }
         }
     }

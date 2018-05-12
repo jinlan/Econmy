@@ -4,6 +4,31 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="RimEconomy" expanded="True">
+            <Node name="RimEconomy" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="About" expanded="True" />
+              <Node name="Assemblies" expanded="True" />
+              <Node name="Defs" expanded="True" />
+              <Node name="Patches" expanded="True">
+                <Node name="Core" expanded="True" />
+                <Node name="DeepRim" expanded="True" />
+                <Node name="Set-Up Camp" expanded="True" />
+              </Node>
+              <Node name="RimEconomy" expanded="True">
+                <Node name="Def" expanded="True" />
+                <Node name="internal" expanded="True" />
+              </Node>
+              <Node name="README.md" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
 </Properties>

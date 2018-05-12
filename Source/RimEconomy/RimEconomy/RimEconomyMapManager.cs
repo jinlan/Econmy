@@ -8,11 +8,7 @@ using HugsLib.Settings;
 
 namespace RimEconomy {
 
-    public class SpecialityMapManager : MapComponent {
-
-        public const float PawnExtraSpawn = 0.5f;
-        public const float PlantExtraSpawn = 0.15f;
-        public const float ResourceRockExtraSpawn = 1f;
+    public class RimEconomyMapManager : MapComponent {
 
         private float pawnExtraSpawn;
         private float plantExtraSpawn;
@@ -20,10 +16,10 @@ namespace RimEconomy {
 
         private Speciality speciality;
 
-        public SpecialityMapManager(Map map) : base(map) {
+        public RimEconomyMapManager(Map map) : base(map) {
         }
 
-        public void Generate(Speciality speciality) {
+        public void GenerateMap(Speciality speciality) {
             this.speciality = speciality;
             readSetting();
             generateAnimals();

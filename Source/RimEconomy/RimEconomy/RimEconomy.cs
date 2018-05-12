@@ -7,6 +7,16 @@ using Verse;
 namespace RimEconomy {
     public class RimEconomy : ModBase {
 
+        private const float ChanceAnimal = 0.001f;
+        private const float ChancePlant = 0.002f;
+        private const float ChanceResourceRock = 0.0005f;
+
+        private const float PawnExtraSpawn = 0.5f;
+        private const float PlantExtraSpawn = 0.15f;
+        private const float ResourceRockExtraSpawn = 1f;
+
+        private const int ExtraPowerPerColonyLevel = 15;
+
         public static Dictionary<string, SettingHandle<string>> SettingData;
 
         public RimEconomy() : base() {
@@ -20,7 +30,7 @@ namespace RimEconomy {
         }
         public override void DefsLoaded() {
             float parsedFloat;
-            SettingData["specialityChanceAnimal"] = Settings.GetHandle<string>("specialityChanceAnimal", "world animal speciality chance", "This is the chance of a world tile to gain an animal speciality.", SpecialityWorldManager.ChanceAnimal.ToString(), (string arg) => {
+            SettingData["specialityChanceAnimal"] = Settings.GetHandle<string>("specialityChanceAnimal", "world animal speciality chance", "This is the chance of a world tile to gain an animal speciality.", ChanceAnimal.ToString(), (string arg) => {
                 if(!float.TryParse(arg, out parsedFloat)) {
                     return false;
                 }
@@ -29,7 +39,7 @@ namespace RimEconomy {
                 }
                 return true;
             });
-            SettingData["specialityChancePlant"] = Settings.GetHandle<string>("specialityChancePlant", "world plant speciality chance", "This is the chance of a world tile to gain a plant speciality.", SpecialityWorldManager.ChancePlant.ToString(), (string arg) => {
+            SettingData["specialityChancePlant"] = Settings.GetHandle<string>("specialityChancePlant", "world plant speciality chance", "This is the chance of a world tile to gain a plant speciality.", ChancePlant.ToString(), (string arg) => {
                 if(!float.TryParse(arg, out parsedFloat)) {
                     return false;
                 }
@@ -38,7 +48,7 @@ namespace RimEconomy {
                 }
                 return true;
             });
-            SettingData["specialityChanceResourceRock"] = Settings.GetHandle<string>("specialityChanceResourceRock", "world resource rock speciality chance", "This is the chance of a world tile to gain an resource rock speciality.", SpecialityWorldManager.ChanceResourceRock.ToString(), (string arg) => {
+            SettingData["specialityChanceResourceRock"] = Settings.GetHandle<string>("specialityChanceResourceRock", "world resource rock speciality chance", "This is the chance of a world tile to gain an resource rock speciality.", ChanceResourceRock.ToString(), (string arg) => {
                 if(!float.TryParse(arg, out parsedFloat)) {
                     return false;
                 }
@@ -47,7 +57,7 @@ namespace RimEconomy {
                 }
                 return true;
             });
-            SettingData["pawnExtraSpawn"] = Settings.GetHandle<string>("pawnExtraSpawn", "extra pawn", "How many pawns will be spawned in a pawn speciality map.", SpecialityMapManager.PawnExtraSpawn.ToString(), (string arg) => {
+            SettingData["pawnExtraSpawn"] = Settings.GetHandle<string>("pawnExtraSpawn", "extra pawn", "How many pawns will be spawned in a pawn speciality map.", PawnExtraSpawn.ToString(), (string arg) => {
                 if(!float.TryParse(arg, out parsedFloat)) {
                     return false;
                 }
@@ -56,7 +66,7 @@ namespace RimEconomy {
                 }
                 return true;
             });
-            SettingData["plantExtraSpawn"] = Settings.GetHandle<string>("plantExtraSpawn", "extra plant", "How many plants will be spawned in a plant speciality map.", SpecialityMapManager.PlantExtraSpawn.ToString(), (string arg) => {
+            SettingData["plantExtraSpawn"] = Settings.GetHandle<string>("plantExtraSpawn", "extra plant", "How many plants will be spawned in a plant speciality map.", PlantExtraSpawn.ToString(), (string arg) => {
                 if(!float.TryParse(arg, out parsedFloat)) {
                     return false;
                 }
@@ -65,11 +75,21 @@ namespace RimEconomy {
                 }
                 return true;
             });
-            SettingData["resourceRockExtraSpawn"] = Settings.GetHandle<string>("resourceRockExtraSpawn", "extra resource rock", "How many resource rocks will be spawned in a resource rock speciality map.", SpecialityMapManager.ResourceRockExtraSpawn.ToString(), (string arg) => {
+            SettingData["resourceRockExtraSpawn"] = Settings.GetHandle<string>("resourceRockExtraSpawn", "extra resource rock", "How many resource rocks will be spawned in a resource rock speciality map.", ResourceRockExtraSpawn.ToString(), (string arg) => {
                 if(!float.TryParse(arg, out parsedFloat)) {
                     return false;
                 }
                 if(parsedFloat > 10 || parsedFloat < 0) {
+                    return false;
+                }
+                return true;
+            });
+            int parsedInt;
+            SettingData["extraFactionBasePowerPerSpeciality"] = Settings.GetHandle<string>("extraFactionBasePowerPerSpeciality", "extra faction base power per speciality", "Every speciality will be the nearby faction bases be generated more powerful.", ExtraPowerPerColonyLevel.ToString(), (string arg) => {
+                if(!int.TryParse(arg, out parsedInt)) {
+                    return false;
+                }
+                if(parsedInt > 150 || parsedInt < 0) {
                     return false;
                 }
                 return true;

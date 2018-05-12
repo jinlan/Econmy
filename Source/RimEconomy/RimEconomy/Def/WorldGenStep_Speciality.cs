@@ -10,8 +10,8 @@ namespace RimEconomy {
     public class WorldGenStep_Speciality : WorldGenStep {
 
         public override void GenerateFresh(string seed) {
-            SpecialityWorldManager mapBounusWorldManager = Find.World.GetComponent<SpecialityWorldManager>();
-            mapBounusWorldManager.generateFresh(seed);
+            RimEconomyWorldManager rimEconomyWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
+            rimEconomyWorldManager.generateSpecialitiesFresh(seed);
         }
 
         public override void GenerateFromScribe(string seed) {

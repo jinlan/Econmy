@@ -6,3 +6,6 @@ Every world tile has a chance to have a speciality when generated. Increasing an
 
 **production**
 AI base will produce extra goods based on what and how many specialities they have near by.
+
+**faction base enhancement**
+AI base will be generated more powerful if there is more specialities nearby.

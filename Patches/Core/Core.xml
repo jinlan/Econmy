@@ -12,6 +12,15 @@
 			</li>
 		</operations>
 	</Operation>
+	<Operation Class="PatchOperationReplace">
+		<xpath>/Defs/GenStepDef[defName="FactionBase"]/genStep[@Class="GenStep_FactionBase"]</xpath>
+		<value>
+			<genStep Class="RimEconomy.GenStep_FactionBaseWithLevel">
+				<count>1</count>
+				<nearMapCenter>true</nearMapCenter>
+			</genStep>
+		</value>
+	</Operation>
 	<!--Operation Class="PatchOperationAdd">
 		<xpath>/Defs/DesignationCategoryDef/specialDesignatorClasses</xpath>
 		<value>
