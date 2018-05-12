@@ -15,7 +15,9 @@
               <Node name="Assemblies" expanded="True" />
               <Node name="Defs" expanded="True" />
               <Node name="Patches" expanded="True">
-                <Node name="Core" expanded="True" />
+                <Node name="Core" expanded="True">
+                  <Node name="Core.xml" selected="True" />
+                </Node>
                 <Node name="DeepRim" expanded="True" />
                 <Node name="Set-Up Camp" expanded="True" />
               </Node>
@@ -23,7 +25,6 @@
                 <Node name="Def" expanded="True" />
                 <Node name="internal" expanded="True" />
               </Node>
-              <Node name="README.md" selected="True" />
             </Node>
           </Node>
         </State>
