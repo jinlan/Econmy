@@ -60,12 +60,14 @@ namespace RimEconomy {
                         }
                     }));
                 }
-                if(totalPriceRange == FloatRange.Zero && settlement != null) {
+                if(totalPriceRange == FloatRange.Zero) {
                     int countBounus = specialityList.Aggregate(0, (int count, Speciality speciality) => count + speciality.getAllBounus().Count);
                     totalPriceRange = new FloatRange(1000 * countBounus, 2000 * countBounus);
                 }
             }
-            maxTechLevelGenerate = TradeSession.trader.Faction.def.techLevel;
+            if(TradeSession.trader != null && TradeSession.trader.Faction != null) {
+                maxTechLevelGenerate = TradeSession.trader.Faction.def.techLevel;
+            }
         }
     }
 }
