@@ -8,10 +8,8 @@ namespace RimEconomy {
 
         protected override void ScatterAt(IntVec3 c, Map map, int stackCount = 1) {
             RimEconomyWorldManager rimEconomyWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
-            int ticksPerDay = 60000 / 24 * 14;
-            float baseHumanMoveCost = 2500;
-            int specialityCount = rimEconomyWorldManager.getTileNeighboringSpecialities(map.Tile, ticksPerDay, baseHumanMoveCost).Count;
-            int extraFactionBasePowerPerSpeciality = int.Parse(RimEconomy.SettingData["extraFactionBasePowerPerSpeciality"].Value);
+            int specialityCount = rimEconomyWorldManager.getSettlementTileSpecialities(map.Tile).Count;
+            int extraFactionBasePowerPerSpeciality = RimEconomy.SettingInt["extraFactionBasePowerPerSpeciality"].Value;
             float Modifier = 1;
             IntRange factionBaseSizeRange = new IntRange(Math.Min(map.Size.x - 50, 34 + (int)(specialityCount * extraFactionBasePowerPerSpeciality * Modifier)), Math.Min(map.Size.z - 50, 38 + (int)(specialityCount * extraFactionBasePowerPerSpeciality * Modifier)));
             int randomInRange = factionBaseSizeRange.RandomInRange;

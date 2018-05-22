@@ -8,7 +8,11 @@ using HugsLib.Settings;
 
 namespace RimEconomy {
 
-    public class RimEconomyMapManager : MapComponent {
+    public class SpecialityMapManager : MapComponent {
+
+        public const float PawnExtraSpawn = 0.5f;
+        public const float PlantExtraSpawn = 0.15f;
+        public const float ResourceRockExtraSpawn = 1f;
 
         private float pawnExtraSpawn;
         private float plantExtraSpawn;
@@ -16,10 +20,10 @@ namespace RimEconomy {
 
         private Speciality speciality;
 
-        public RimEconomyMapManager(Map map) : base(map) {
+        public SpecialityMapManager(Map map) : base(map) {
         }
 
-        public void GenerateMap(Speciality speciality) {
+        public void Generate(Speciality speciality) {
             this.speciality = speciality;
             readSetting();
             generateAnimals();
@@ -61,21 +65,21 @@ namespace RimEconomy {
         }
 
         private void readSetting() {
-            SettingHandle<float>.ValueChanged readAnimalSetting = (float value) => {
-                pawnExtraSpawn = value;
+            SettingHandle<string>.ValueChanged readAnimalSetting = (string value) => {
+                pawnExtraSpawn = float.Parse(value);
             };
-            SettingHandle<float>.ValueChanged readPlantSetting = (float value) => {
-                plantExtraSpawn = value;
+            SettingHandle<string>.ValueChanged readPlantSetting = (string value) => {
+                plantExtraSpawn = float.Parse(value);
             };
-            SettingHandle<float>.ValueChanged readResourceRockSetting = (float value) => {
-                resourceRockExtraSpawn = value;
+            SettingHandle<string>.ValueChanged readResourceRockSetting = (string value) => {
+                resourceRockExtraSpawn = float.Parse(value);
             };
-            readAnimalSetting(RimEconomy.SettingFloat["pawnExtraSpawn"].Value);
-            readPlantSetting(RimEconomy.SettingFloat["plantExtraSpawn"].Value);
-            readResourceRockSetting(RimEconomy.SettingFloat["resourceRockExtraSpawn"].Value);
-            RimEconomy.SettingFloat["pawnExtraSpawn"].OnValueChanged = readAnimalSetting;
-            RimEconomy.SettingFloat["plantExtraSpawn"].OnValueChanged = readPlantSetting;
-            RimEconomy.SettingFloat["resourceRockExtraSpawn"].OnValueChanged = readResourceRockSetting;
+            readAnimalSetting(RimEconomy.SettingData["pawnExtraSpawn"].Value);
+            readPlantSetting(RimEconomy.SettingData["plantExtraSpawn"].Value);
+            readResourceRockSetting(RimEconomy.SettingData["resourceRockExtraSpawn"].Value);
+            RimEconomy.SettingData["pawnExtraSpawn"].OnValueChanged = readAnimalSetting;
+            RimEconomy.SettingData["plantExtraSpawn"].OnValueChanged = readPlantSetting;
+            RimEconomy.SettingData["resourceRockExtraSpawn"].OnValueChanged = readResourceRockSetting;
         }
         private void spawnAnimalAt(IntVec3 place, int randomInRange, PawnKindDef animalKingDef) {
             int radius = Mathf.CeilToInt(Mathf.Sqrt((float)animalKingDef.wildSpawn_GroupSizeRange.max));

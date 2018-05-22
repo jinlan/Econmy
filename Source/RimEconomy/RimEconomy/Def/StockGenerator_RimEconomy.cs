@@ -12,8 +12,7 @@ namespace RimEconomy {
         private List<Thing> productionListWithoutQuantity;
 
         public override IEnumerable<Thing> GenerateThings(int forTile) {
-            reset();
-            if(productionListWithoutQuantity == null) {
+            if(!reset()) {
                 yield break;
             }
             foreach(Thing thing in productionListWithoutQuantity) {
@@ -32,18 +31,16 @@ namespace RimEconomy {
                 }
             }
             productionListWithoutQuantity = null;
-            yield break;
         }
 
         public override bool HandlesThingDef(ThingDef thingDef) {
-            reset();
-            if(productionListWithoutQuantity == null) {
+            if(!reset()) {
                 return false;
             }
             return productionListWithoutQuantity.Any((Thing obj) => obj.def == thingDef);
         }
 
-        private void reset() {
+        private bool reset() {
             Settlement settlement = TradeSession.trader as Settlement;
             if(settlement != null) {
                 RimEconomyWorldManager specialityWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
@@ -64,10 +61,10 @@ namespace RimEconomy {
                     int countBounus = specialityList.Aggregate(0, (int count, Speciality speciality) => count + speciality.getAllBounus().Count);
                     totalPriceRange = new FloatRange(1000 * countBounus, 2000 * countBounus);
                 }
-            }
-            if(TradeSession.trader != null && TradeSession.trader.Faction != null) {
                 maxTechLevelGenerate = TradeSession.trader.Faction.def.techLevel;
+                return true;
             }
+            return false;
         }
     }
 }

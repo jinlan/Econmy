@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
@@ -12,7 +13,7 @@ namespace RimEconomy {
     public class RimEconomyWorldManager : WorldComponent {
 
         private Dictionary<int, Speciality> tileSpeciality;
-        private Dictionary<int, ExposableList<Speciality>> tileNeighboringSpecialities;
+        private Dictionary<int, ExposableList<Speciality>> settlementSpecialities;
 
         private static IEnumerable<ThingDef> allManufactored;
 
@@ -20,7 +21,7 @@ namespace RimEconomy {
 
         public RimEconomyWorldManager(World world) : base(world) {
             tileSpeciality = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
-            tileNeighboringSpecialities = new Dictionary<int, ExposableList<Speciality>>();
+            settlementSpecialities = new Dictionary<int, ExposableList<Speciality>>();
             settlementProductionListMap = new Dictionary<Settlement, Dictionary<Thing, float>>();
         }
 
@@ -28,9 +29,9 @@ namespace RimEconomy {
             float chanceAnimal;
             float chancePlant;
             float chanceResourceRock;
-            chanceAnimal = float.Parse(RimEconomy.SettingData["specialityChanceAnimal"].Value);
-            chancePlant = float.Parse(RimEconomy.SettingData["specialityChancePlant"].Value);
-            chanceResourceRock = float.Parse(RimEconomy.SettingData["specialityChanceResourceRock"].Value);
+            chanceAnimal = RimEconomy.SettingFloat["specialityChanceAnimal"].Value;
+            chancePlant = RimEconomy.SettingFloat["specialityChancePlant"].Value;
+            chanceResourceRock = RimEconomy.SettingFloat["specialityChanceResourceRock"].Value;
             Rand.Seed = GenText.StableStringHash(seed);
             List<Tile> tiles = Find.WorldGrid.tiles;
             Dictionary<BiomeDef, IEnumerable<ThingDef>> biomePlantCache = new Dictionary<BiomeDef, IEnumerable<ThingDef>>();
@@ -78,7 +79,7 @@ namespace RimEconomy {
 
         public override void ExposeData() {
             Scribe_Collections.Look<int, Speciality>(ref tileSpeciality, "sps", LookMode.Value, LookMode.Deep);
-            Scribe_Collections.Look<int, ExposableList<Speciality>>(ref tileNeighboringSpecialities, "tns", LookMode.Value, LookMode.Deep);
+            Scribe_Collections.Look<int, ExposableList<Speciality>>(ref settlementSpecialities, "tns", LookMode.Value, LookMode.Deep);
         }
 
         public List<ThingDef> getSettlementRawMaterials(Settlement settlement) {
@@ -154,60 +155,115 @@ namespace RimEconomy {
             settlementProductionListMap[settlement] = productionListWithOrder;
             return shuffleProductionList(settlementProductionListMap[settlement]);
         }
-        public List<Speciality> getTileNeighboringSpecialities(int tile, int distance, float moveCost) {
-            ExposableList<Speciality> specialityList;
-            if(tileNeighboringSpecialities.ContainsKey(tile)) {
-                specialityList = tileNeighboringSpecialities[tile];
-            } else {
-                specialityList = new ExposableList<Speciality>();
-                specialityList.Exposer = (List<Speciality> list) => {
-                    Scribe_Collections.Look<Speciality>(ref list, "data", LookMode.Reference);
-                };
-                WorldGrid grid = Find.WorldGrid;
-                WorldPathFinder finder = Find.WorldPathFinder;
-                finder.FloodPathsWithCost(new List<int> { tile }, (int currentPlace, int neighborPlace) => {
-                    Tile neighborTile = grid.tiles[neighborPlace];
-                    if(neighborTile == null && neighborTile.WaterCovered) {
-                        return 99999;
-                    }
-                    Season season = GenDate.Season(Find.TickManager.TicksGame, grid.LongLatOf(neighborPlace));
-                    switch(season) {
-                    case Season.Spring:
-                        moveCost += neighborTile.biome.pathCost_spring;
-                        break;
-                    case Season.Summer:
-                    case Season.PermanentSummer:
-                        moveCost += neighborTile.biome.pathCost_summer;
-                        break;
-                    case Season.Fall:
-                        moveCost += neighborTile.biome.pathCost_fall;
-                        break;
-                    case Season.Winter:
-                    case Season.PermanentWinter:
-                        moveCost += neighborTile.biome.pathCost_winter;
-                        break;
-                    }
-                    moveCost *= grid.GetRoadMovementMultiplierFast(currentPlace, neighborPlace);
-                    return (int)moveCost;
-                }, null, (int currentPlace, float cost) => {
-                    if(cost <= distance) {
-                        Speciality speciality = getTileSpeciality(currentPlace);
-                        if(speciality != null) {
-                            specialityList.Add(speciality);
+        protected ExposableList<Speciality> getTileNeighboringSpecialities(int tile, int timeLimit, float moveCost, Func<int, int, Speciality, bool> extraValidator = null) {
+            ExposableList<Speciality> specialityList = new ExposableList<Speciality>();
+            specialityList.Exposer = (List<Speciality> list) => {
+                Scribe_Collections.Look<Speciality>(ref list, "data", LookMode.Reference);
+            };
+            WorldGrid grid = Find.WorldGrid;
+            Dictionary<int, float> timeCostToTile = new Dictionary<int, float>();
+            Find.WorldFloodFiller.FloodFill(tile, (int currentPlace) => {
+                if(Find.World.Impassable(currentPlace)) {
+                    return false;
+                }
+                Tile tileObject = grid.tiles[currentPlace];
+                if(tileObject == null || tileObject.WaterCovered || tileObject.hilliness == Hilliness.Impassable) {
+                    return false;
+                }
+                if(currentPlace == tile) {
+                    timeCostToTile[currentPlace] = 0;
+                    return true;
+                }
+                List<int> neighbors = new List<int>(6);
+                grid.GetTileNeighbors(currentPlace, neighbors);
+                float bestNeighborTimeCost = -1;
+                int bestNeighbor = currentPlace;
+                foreach(int neighborTile in neighbors) {
+                    if(timeCostToTile.ContainsKey(neighborTile)) {
+                        if(bestNeighborTimeCost < 0) {
+                            bestNeighborTimeCost = timeCostToTile[neighborTile];
                         }
-                        return false;
-                    } else {
-                        return true;
+                        if(timeCostToTile[neighborTile] < bestNeighborTimeCost) {
+                            bestNeighborTimeCost = timeCostToTile[neighborTile];
+                            bestNeighbor = neighborTile;
+                        }
                     }
-                });
-                tileNeighboringSpecialities[tile] = specialityList;
-            }
+                }
+                float timeCostToCurrentPlace = bestNeighborTimeCost + getMoveCost(bestNeighbor, currentPlace, moveCost);
+                if(timeCostToCurrentPlace <= timeLimit) {
+                    timeCostToTile[currentPlace] = timeCostToCurrentPlace;
+                    return true;
+                } else {
+                    return false;
+                }
+            }, (int currentPlace, int distanceInTiles) => {
+                Speciality speciality = getTileSpeciality(currentPlace);
+                if(speciality != null) {
+                    specialityList.Add(speciality);
+                }
+                if(extraValidator != null) {
+                    return extraValidator(currentPlace, distanceInTiles, speciality);
+                }
+                return false;
+            });
             return specialityList;
         }
         public List<Speciality> getSettlementSpecialities(Settlement settlement) {
-            int ticksPerDay = 60000 / 24 * 14;
-            float baseHumanMoveCost = 2500;
-            return getTileNeighboringSpecialities(settlement.Tile, ticksPerDay, baseHumanMoveCost);
+            return getSettlementTileSpecialities(settlement.Tile);
+        }
+        private float getMoveCost(int from, int to, float moveCost) {
+            return ((moveCost + getSeasonMoveCost(from)) / 2 + (moveCost + getSeasonMoveCost(to)) / 2) * Find.WorldGrid.GetRoadMovementMultiplierFast(from, to);
+        }
+        private float getSeasonMoveCost(int currentPlace) {
+            WorldGrid grid = Find.WorldGrid;
+            Tile currentTile = grid.tiles[currentPlace];
+            Season season = GenDate.Season(Find.TickManager.TicksGame, grid.LongLatOf(currentPlace));
+            switch(season) {
+            case Season.Spring:
+                return currentTile.biome.pathCost_spring;
+            case Season.Summer:
+            case Season.PermanentSummer:
+                return currentTile.biome.pathCost_summer;
+            case Season.Fall:
+                return currentTile.biome.pathCost_fall;
+            case Season.Winter:
+            case Season.PermanentWinter:
+                return currentTile.biome.pathCost_winter;
+            }
+            Log.Error("unable to know seasonal move cost");
+            return 0;
+        }
+        public List<Speciality> getSettlementTileSpecialities(int tile) {
+            ExposableList<Speciality> specialityList = null;
+            if(settlementSpecialities.ContainsKey(tile)) {
+                specialityList = settlementSpecialities[tile];
+            } else {
+                float baseHumanMoveCost = 2500;
+                int ticksPerDay = 60000 / 24 * 16;
+                int searchDistance = ticksPerDay * 2;
+                float moveCost = baseHumanMoveCost;
+                Func<int, int, Speciality, bool> extraValidator = null;
+                bool hasMountable = false;
+                if(RimEconomy.GiddyUpCoreType != null) {
+                    extraValidator = (int currentPlace, int distanceInTiles, Speciality speciality) => {
+                        if(speciality != null && speciality.AnimalSpeciality != null) {
+                            bool mountable = (bool)RimEconomy.GiddyUpCoreType.GetMethod("isAllowedInModOptions", BindingFlags.Static | BindingFlags.Public).Invoke(null, new object[] { speciality.AnimalSpeciality.race.defName });
+                            if(mountable) {
+                                hasMountable = true;
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                }
+                specialityList = getTileNeighboringSpecialities(tile, searchDistance, moveCost, extraValidator);
+                if(RimEconomy.GiddyUpCoreType != null && hasMountable) {
+                    moveCost = moveCost / (1 + RimEconomy.GiddyUpCaravanBonus / 100);
+                    specialityList = getTileNeighboringSpecialities(tile, searchDistance, moveCost);
+                }
+                settlementSpecialities[tile] = specialityList;
+            }
+            return specialityList;
         }
         private List<Thing> shuffleProductionList(Dictionary<Thing, float> listWithWeight) {
             return listWithWeight.OrderByDescending((KeyValuePair<Thing, float> kvp) => kvp.Value, new PublicExtension.CompareFloat()).ThenBy((KeyValuePair<Thing, float> kvp) => kvp.Key, new PublicExtension.randomOrder<Thing>()).Select((KeyValuePair<Thing, float> arg) => arg.Key).ToList();
