@@ -98,7 +98,6 @@ namespace RimEconomy {
                 }
                 allSpecialityProduction.AddRange(speciality.getAllProductions());
             }
-            allSpecialityProduction.Remove(ThingDefOf.Silver);
             return allSpecialityProduction;
         }
         public List<Thing> getSettlementProductionList(Settlement settlement) {

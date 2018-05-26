@@ -58,7 +58,7 @@ namespace RimEconomy {
                     }));
                 }
                 if(totalPriceRange == FloatRange.Zero) {
-                    int countBounus = specialityList.Aggregate(0, (int count, Speciality speciality) => count + speciality.getAllBounus().Count);
+                    int countBounus = specialityList.Aggregate(0, (int count, Speciality speciality) => count + speciality.getAllBounus().Count + (speciality.produceSilver() ? RimEconomy.SilverPower : 0));
                     totalPriceRange = new FloatRange(1000 * countBounus, 2000 * countBounus);
                 }
                 maxTechLevelGenerate = TradeSession.trader.Faction.def.techLevel;

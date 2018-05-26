@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RimWorld;
 using Verse;
 using RimWorld.BaseGen;
@@ -8,10 +9,10 @@ namespace RimEconomy {
 
         protected override void ScatterAt(IntVec3 c, Map map, int stackCount = 1) {
             RimEconomyWorldManager rimEconomyWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
-            int specialityCount = rimEconomyWorldManager.getSettlementTileSpecialities(map.Tile).Count;
+            List<Speciality> specialities = rimEconomyWorldManager.getSettlementTileSpecialities(map.Tile);
+            int specialityPowerCount = specialities.Count + (specialities.FindAll((Speciality speciality) => speciality.produceSilver()).Count) * RimEconomy.SilverPower;
             int extraFactionBasePowerPerSpeciality = RimEconomy.SettingInt["extraFactionBasePowerPerSpeciality"].Value;
-            float Modifier = 1;
-            IntRange factionBaseSizeRange = new IntRange(Math.Min(map.Size.x - 50, 34 + (int)(specialityCount * extraFactionBasePowerPerSpeciality * Modifier)), Math.Min(map.Size.z - 50, 38 + (int)(specialityCount * extraFactionBasePowerPerSpeciality * Modifier)));
+            IntRange factionBaseSizeRange = new IntRange(Math.Min(map.Size.x - 50, 34 + (int)(specialityPowerCount * extraFactionBasePowerPerSpeciality)), Math.Min(map.Size.z - 50, 38 + (int)(specialityPowerCount * extraFactionBasePowerPerSpeciality)));
             int randomInRange = factionBaseSizeRange.RandomInRange;
             int randomInRange2 = factionBaseSizeRange.RandomInRange;
             CellRect rect = new CellRect(c.x - randomInRange / 2, c.z - randomInRange2 / 2, randomInRange, randomInRange2);

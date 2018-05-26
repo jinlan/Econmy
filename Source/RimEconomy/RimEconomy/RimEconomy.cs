@@ -22,6 +22,8 @@ namespace RimEconomy {
         private const string GiddyUpCoreVersion = "0.18.7.0";
         private const string GiddyUpCaravanVersion = "0.18.1.0";
 
+        public const int SilverPower = 2;
+
         public static Dictionary<string, SettingHandle<float>> SettingFloat;
         public static Dictionary<string, SettingHandle<int>> SettingInt;
         public static Dictionary<string, SettingHandle<string>> SettingString;

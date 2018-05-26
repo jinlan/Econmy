@@ -75,10 +75,14 @@ namespace RimEconomy {
             if(plantSpeciality != null) {
                 allThingDef.Add(plantSpeciality);
             }
-            if(resourceRockSpeciality != null) {
+            if(resourceRockSpeciality != null && resourceRockSpeciality != ThingDefOf.Silver) {
                 allThingDef.Add(resourceRockSpeciality);
             }
             return allThingDef;
+        }
+
+        public bool produceSilver() {
+            return resourceRockSpeciality == ThingDefOf.Silver;
         }
 
         public List<ThingDef> getAllProductions() {
