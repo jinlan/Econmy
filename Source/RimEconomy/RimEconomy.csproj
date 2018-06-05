@@ -8,7 +8,7 @@
     <RootNamespace>RimEconomy</RootNamespace>
     <AssemblyName>RimEconomy</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.2</ReleaseVersion>
+    <ReleaseVersion>1.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Default|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>

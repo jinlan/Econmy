@@ -3,7 +3,7 @@
 	<name>RimEconomy</name>
 	<author>TW</author>
 	<targetVersion>0.18.0</targetVersion>
-	<description>RimEconomy V 1.2
+	<description>RimEconomy V 1.3
 RimEconomy is a rimworld mod that trying to add many economy related feature to the game.
 
 speciality natural resource
@@ -14,6 +14,8 @@ AI base will produce extra goods based on what and how many specialities they ha
 
 faction base enhancement
 AI base will be generated more powerful if there is more specialities nearby.
+
+Does not require a new game.
 
 This mod support:
 DeepRim, Set-Up Camp, Giddy-Up Caravan.
