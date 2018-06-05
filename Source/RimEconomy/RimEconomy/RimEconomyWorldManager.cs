@@ -19,20 +19,24 @@ namespace RimEconomy {
 
         private Dictionary<Settlement, Dictionary<Thing, float>> settlementProductionListMap;
 
+        private bool generated = false;
+
         public RimEconomyWorldManager(World world) : base(world) {
             tileSpeciality = new Dictionary<int, Speciality>((int)(Find.WorldGrid.TilesCount * 4 * 0.001));
             settlementSpecialities = new Dictionary<int, ExposableList<Speciality>>();
             settlementProductionListMap = new Dictionary<Settlement, Dictionary<Thing, float>>();
         }
 
-        public void generateSpecialitiesFresh(string seed) {
+        private void generateSpecialities(string seed) {
             float chanceAnimal;
             float chancePlant;
             float chanceResourceRock;
             chanceAnimal = RimEconomy.SettingFloat["specialityChanceAnimal"].Value;
             chancePlant = RimEconomy.SettingFloat["specialityChancePlant"].Value;
             chanceResourceRock = RimEconomy.SettingFloat["specialityChanceResourceRock"].Value;
-            Rand.Seed = GenText.StableStringHash(seed);
+            if(seed != null) {
+                Rand.Seed = GenText.StableStringHash(seed);
+            }
             List<Tile> tiles = Find.WorldGrid.tiles;
             Dictionary<BiomeDef, IEnumerable<ThingDef>> biomePlantCache = new Dictionary<BiomeDef, IEnumerable<ThingDef>>();
             IEnumerable<ThingDef> resourceRocks = from d in DefDatabase<ThingDef>.AllDefs
@@ -70,6 +74,17 @@ namespace RimEconomy {
             }
         }
 
+        public void generateSpecialitiesFresh(string seed = null) {
+            generateSpecialities(seed);
+            generated = true;
+        }
+
+        public void GenerateSpecialitiesFromScribe(string seed = null) {
+            if(!generated) {
+                generateSpecialities(seed);
+            }
+        }
+
         public Speciality getTileSpeciality(int tile) {
             if(tileSpeciality.ContainsKey(tile)) {
                 return tileSpeciality[tile];
@@ -78,6 +93,7 @@ namespace RimEconomy {
         }
 
         public override void ExposeData() {
+            Scribe_Values.Look<bool>(ref generated, "g");
             Scribe_Collections.Look<int, Speciality>(ref tileSpeciality, "sps", LookMode.Value, LookMode.Deep);
             Scribe_Collections.Look<int, ExposableList<Speciality>>(ref settlementSpecialities, "tns", LookMode.Value, LookMode.Deep);
         }

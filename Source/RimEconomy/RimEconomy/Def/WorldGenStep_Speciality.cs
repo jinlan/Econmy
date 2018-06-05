@@ -15,7 +15,8 @@ namespace RimEconomy {
         }
 
         public override void GenerateFromScribe(string seed) {
-            return;
+            RimEconomyWorldManager rimEconomyWorldManager = Find.World.GetComponent<RimEconomyWorldManager>();
+            rimEconomyWorldManager.GenerateSpecialitiesFromScribe(seed);
         }
     }
 }

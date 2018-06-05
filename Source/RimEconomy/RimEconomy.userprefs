@@ -4,10 +4,6 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="RimEconomy\Def\StockGenerator_RimEconomy.cs">
-    <Files>
-      <File FileName="RimEconomy\Def\StockGenerator_RimEconomy.cs" Line="48" Column="43" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MultiItemStartupConfigurations />
 </Properties>
