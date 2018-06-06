@@ -39,6 +39,7 @@ namespace RimEconomy {
             }
             List<Tile> tiles = Find.WorldGrid.tiles;
             Dictionary<BiomeDef, IEnumerable<ThingDef>> biomePlantCache = new Dictionary<BiomeDef, IEnumerable<ThingDef>>();
+            Dictionary<BiomeDef, IEnumerable<PawnKindDef>> biomeAnimalCache = new Dictionary<BiomeDef, IEnumerable<PawnKindDef>>();
             IEnumerable<ThingDef> resourceRocks = from d in DefDatabase<ThingDef>.AllDefs
                                                   where d.category == ThingCategory.Building && d.building != null && d.building.isResourceRock
                                                   select d;
@@ -50,10 +51,23 @@ namespace RimEconomy {
                     ThingDef plantDef = null;
                     ThingDef resourceRock = null;
                     if(Rand.Chance(chanceAnimal * biome.animalDensity)) {
-                        animalKindDef = biome.AllWildAnimals.RandomElementByWeight((PawnKindDef def) => biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average);
+                        IEnumerable<PawnKindDef> animals = null;
+                        if(biomeAnimalCache.ContainsKey(biome)) {
+                            animals = biomeAnimalCache[biome];
+                        } else {
+                            animals = biome.AllWildAnimals;
+                            biomeAnimalCache[biome] = animals;
+                        }
+                        animalKindDef = animals.RandomElementByWeight((PawnKindDef def) => {
+                            if(def.race == DefDatabase<ThingDef>.GetNamed("Rat", true)) {
+                                return 0;
+                            }
+                            return biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average;
+                        });
                     }
                     if(Rand.Chance(chancePlant * biome.plantDensity)) {
                         IEnumerable<ThingDef> plants = null;
+                        float maxCommonality = 5f;
                         if(biomePlantCache.ContainsKey(biome)) {
                             plants = biomePlantCache[biome];
                         } else {
@@ -62,7 +76,13 @@ namespace RimEconomy {
                                      select def;
                             biomePlantCache[biome] = plants;
                         }
-                        plantDef = plants.RandomElementByWeight((ThingDef def) => biome.CommonalityOfPlant(def));
+                        plantDef = plants.RandomElementByWeight((ThingDef def) => {
+                            float commonality = biome.CommonalityOfPlant(def);
+                            if(commonality >= maxCommonality) {
+                                return 0;
+                            }
+                            return commonality;
+                        });
                     }
                     if(Rand.Chance(chanceResourceRock)) {
                         resourceRock = resourceRocks.RandomElementByWeight((ThingDef def) => def.building.mineableScatterCommonality);

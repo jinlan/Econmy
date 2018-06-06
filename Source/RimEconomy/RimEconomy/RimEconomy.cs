@@ -10,7 +10,7 @@ namespace RimEconomy {
     public class RimEconomy : ModBase {
 
         private const float ChanceAnimal = 0.001f;
-        private const float ChancePlant = 0.002f;
+        private const float ChancePlant = 0.003f;
         private const float ChanceResourceRock = 0.0005f;
 
         private const float PawnExtraSpawn = 0.5f;

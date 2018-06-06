@@ -180,6 +180,6 @@ Global
 		$30.IncludeInstanceMembers = True
 		$30.IncludeStaticEntities = True
 		outputpath = ..\..\Assemblies
-		version = 1.3
+		version = 1.4
 	EndGlobalSection
 EndGlobal
