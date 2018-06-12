@@ -22,11 +22,14 @@ namespace RimEconomy {
         private const string GiddyUpCoreVersion = "0.18.7.0";
         private const string GiddyUpCaravanVersion = "0.18.1.0";
 
+        private const bool DontFilterPlant = false;
+
         public const int SilverPower = 2;
 
         public static Dictionary<string, SettingHandle<float>> SettingFloat;
         public static Dictionary<string, SettingHandle<int>> SettingInt;
         public static Dictionary<string, SettingHandle<string>> SettingString;
+        public static Dictionary<string, SettingHandle<bool>> SettingBool;
 
         public static Type GiddyUpCoreType;
         public static int GiddyUpCaravanBonus = 0;
@@ -35,6 +38,7 @@ namespace RimEconomy {
             SettingFloat = new Dictionary<string, SettingHandle<float>>();
             SettingInt = new Dictionary<string, SettingHandle<int>>();
             SettingString = new Dictionary<string, SettingHandle<string>>();
+            SettingBool = new Dictionary<string, SettingHandle<bool>>();
         }
 
         public override string ModIdentifier {
@@ -52,6 +56,7 @@ namespace RimEconomy {
             SettingInt["extraFactionBasePowerPerSpeciality"] = Settings.GetHandle<int>("extraFactionBasePowerPerSpeciality", "extra faction base power per speciality", "Every speciality will be the nearby faction bases be generated more powerful.", ExtraPowerPerColonyLevel, Validators.FloatRangeValidator(0, 150));
             SettingString["GiddyUpCoreVersion"] = Settings.GetHandle<string>("GiddyUpCoreVersion", "version string of your installed GiddyUp Core!", "Version other than default is NOT guaranteed to work, but we can try :p.", GiddyUpCoreVersion);
             SettingString["GiddyUpCaravanVersion"] = Settings.GetHandle<string>("GiddyUpCaravanVersion", "version string of your installed GiddyUp Caravan!", "Version other than default is NOT guaranteed to work, but we can try :p.", GiddyUpCaravanVersion);
+            SettingBool["dontFilterPlant"] = Settings.GetHandle<bool>("dontFilterPlant", "don't filter plant", "If you installed some mod that modify game's commonality system, it may conflict with this mod. If that happens, turn it on and try again.", DontFilterPlant);
 
             checkGiddyUp();
 

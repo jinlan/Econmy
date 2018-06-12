@@ -12,6 +12,8 @@ namespace RimEconomy {
 
     public class RimEconomyWorldManager : WorldComponent {
 
+        private const float maxCommonality = 5;
+
         private Dictionary<int, Speciality> tileSpeciality;
         private Dictionary<int, ExposableList<Speciality>> settlementSpecialities;
 
@@ -28,12 +30,10 @@ namespace RimEconomy {
         }
 
         private void generateSpecialities(string seed) {
-            float chanceAnimal;
-            float chancePlant;
-            float chanceResourceRock;
-            chanceAnimal = RimEconomy.SettingFloat["specialityChanceAnimal"].Value;
-            chancePlant = RimEconomy.SettingFloat["specialityChancePlant"].Value;
-            chanceResourceRock = RimEconomy.SettingFloat["specialityChanceResourceRock"].Value;
+            float chanceAnimal = RimEconomy.SettingFloat["specialityChanceAnimal"].Value;
+            float chancePlant = RimEconomy.SettingFloat["specialityChancePlant"].Value;
+            float chanceResourceRock = RimEconomy.SettingFloat["specialityChanceResourceRock"].Value;
+            bool dontFilterPlant = RimEconomy.SettingBool["dontFilterPlant"].Value;
             if(seed != null) {
                 Rand.Seed = GenText.StableStringHash(seed);
             }
@@ -62,12 +62,14 @@ namespace RimEconomy {
                             if(def.race == DefDatabase<ThingDef>.GetNamed("Rat", true)) {
                                 return 0;
                             }
-                            return biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average;
+                            if(def.wildSpawn_GroupSizeRange.Average > 0) {
+                                return biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average;
+                            }
+                            return 0;
                         });
                     }
                     if(Rand.Chance(chancePlant * biome.plantDensity)) {
                         IEnumerable<ThingDef> plants = null;
-                        float maxCommonality = 5f;
                         if(biomePlantCache.ContainsKey(biome)) {
                             plants = biomePlantCache[biome];
                         } else {
@@ -75,10 +77,18 @@ namespace RimEconomy {
                                      where def.plant != null && (def.plant.harvestedThingDef != null || (def.plant.sowTags != null && def.plant.sowTags.Contains("Ground")))
                                      select def;
                             biomePlantCache[biome] = plants;
+                            Log.Message("-----------deubg----------------");
+                            Log.Message("biome: " + biome);
+                            foreach(ThingDef def in plants) {
+                                Log.Message("def: " + def + " commonality: " + biome.CommonalityOfPlant(def));
+                            }
                         }
                         plantDef = plants.RandomElementByWeight((ThingDef def) => {
+                            if(!dontFilterPlant && def == DefDatabase<ThingDef>.GetNamed("PlantGrass", true)) {
+                                return 0;
+                            }
                             float commonality = biome.CommonalityOfPlant(def);
-                            if(commonality >= maxCommonality) {
+                            if(!dontFilterPlant && commonality >= maxCommonality) {
                                 return 0;
                             }
                             return commonality;
@@ -113,7 +123,7 @@ namespace RimEconomy {
         }
 
         public override void ExposeData() {
-            Scribe_Values.Look<bool>(ref generated, "g");
+            Scribe_Values.Look<bool>(ref generated, "g", false, true);
             Scribe_Collections.Look<int, Speciality>(ref tileSpeciality, "sps", LookMode.Value, LookMode.Deep);
             Scribe_Collections.Look<int, ExposableList<Speciality>>(ref settlementSpecialities, "tns", LookMode.Value, LookMode.Deep);
         }
