@@ -22,7 +22,10 @@ namespace RimEconomy {
         private const string GiddyUpCoreVersion = "0.18.7.0";
         private const string GiddyUpCaravanVersion = "0.18.1.0";
 
-        private const bool DontFilterPlant = false;
+        private const bool dontFilterSpeciality = false;
+
+        private const int maxCommonalityOfPlant = 3;
+        private const int maxCommonalityOfAnimal = 1;
 
         public const int SilverPower = 2;
 
@@ -56,7 +59,9 @@ namespace RimEconomy {
             SettingInt["extraFactionBasePowerPerSpeciality"] = Settings.GetHandle<int>("extraFactionBasePowerPerSpeciality", "extra faction base power per speciality", "Every speciality will be the nearby faction bases be generated more powerful.", ExtraPowerPerColonyLevel, Validators.FloatRangeValidator(0, 150));
             SettingString["GiddyUpCoreVersion"] = Settings.GetHandle<string>("GiddyUpCoreVersion", "version string of your installed GiddyUp Core!", "Version other than default is NOT guaranteed to work, but we can try :p.", GiddyUpCoreVersion);
             SettingString["GiddyUpCaravanVersion"] = Settings.GetHandle<string>("GiddyUpCaravanVersion", "version string of your installed GiddyUp Caravan!", "Version other than default is NOT guaranteed to work, but we can try :p.", GiddyUpCaravanVersion);
-            SettingBool["dontFilterPlant"] = Settings.GetHandle<bool>("dontFilterPlant", "don't filter plant", "If you installed some mod that modify game's commonality system, it may conflict with this mod. If that happens, turn it on and try again.", DontFilterPlant);
+            SettingBool["dontFilterSpeciality"] = Settings.GetHandle<bool>("dontFilterSpeciality", "don't filter speciality", "If you installed some mod that modify game's commonality system, it may conflict with this mod. If that happens, turn it on and try again.", dontFilterSpeciality);
+            SettingFloat["maxCommonalityOfAnimal"] = Settings.GetHandle<float>("maxCommonalityOfAnimal", "max commonality of animal", "Animal with commonality bigger than this value will never be set as a speciality.", maxCommonalityOfAnimal, Validators.FloatRangeValidator(0, 100));
+            SettingFloat["maxCommonalityOfPlant"] = Settings.GetHandle<float>("maxCommonalityOfPlant", "max commonality of plant", "Plant with commonality bigger than this value will never be set as a speciality.", maxCommonalityOfPlant, Validators.FloatRangeValidator(0, 100));
 
             checkGiddyUp();
 

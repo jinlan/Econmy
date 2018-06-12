@@ -12,8 +12,6 @@ namespace RimEconomy {
 
     public class RimEconomyWorldManager : WorldComponent {
 
-        private const float maxCommonality = 5;
-
         private Dictionary<int, Speciality> tileSpeciality;
         private Dictionary<int, ExposableList<Speciality>> settlementSpecialities;
 
@@ -33,7 +31,9 @@ namespace RimEconomy {
             float chanceAnimal = RimEconomy.SettingFloat["specialityChanceAnimal"].Value;
             float chancePlant = RimEconomy.SettingFloat["specialityChancePlant"].Value;
             float chanceResourceRock = RimEconomy.SettingFloat["specialityChanceResourceRock"].Value;
-            bool dontFilterPlant = RimEconomy.SettingBool["dontFilterPlant"].Value;
+            bool dontFilterSpeciality = RimEconomy.SettingBool["dontFilterSpeciality"].Value;
+            float maxCommonalityOfAnimal = RimEconomy.SettingFloat["maxCommonalityOfAnimal"].Value;
+            float maxCommonalityOfPlant = RimEconomy.SettingFloat["maxCommonalityOfPlant"].Value;
             if(seed != null) {
                 Rand.Seed = GenText.StableStringHash(seed);
             }
@@ -57,13 +57,22 @@ namespace RimEconomy {
                         } else {
                             animals = biome.AllWildAnimals;
                             biomeAnimalCache[biome] = animals;
+                            Log.Message("-----------deubg for animal----------------");
+                            Log.Message("biome: " + biome);
+                            foreach(PawnKindDef def in animals) {
+                                Log.Message("def: " + def.race + " commonality: " + biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average);
+                            }
                         }
                         animalKindDef = animals.RandomElementByWeight((PawnKindDef def) => {
                             if(def.race == DefDatabase<ThingDef>.GetNamed("Rat", true)) {
                                 return 0;
                             }
                             if(def.wildSpawn_GroupSizeRange.Average > 0) {
-                                return biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average;
+                                float commonality = biome.CommonalityOfAnimal(def) / def.wildSpawn_GroupSizeRange.Average;
+                                if(!dontFilterSpeciality && commonality >= maxCommonalityOfAnimal) {
+                                    return 0;
+                                }
+                                return commonality;
                             }
                             return 0;
                         });
@@ -77,18 +86,18 @@ namespace RimEconomy {
                                      where def.plant != null && (def.plant.harvestedThingDef != null || (def.plant.sowTags != null && def.plant.sowTags.Contains("Ground")))
                                      select def;
                             biomePlantCache[biome] = plants;
-                            Log.Message("-----------deubg----------------");
+                            Log.Message("-----------deubg for plant----------------");
                             Log.Message("biome: " + biome);
                             foreach(ThingDef def in plants) {
                                 Log.Message("def: " + def + " commonality: " + biome.CommonalityOfPlant(def));
                             }
                         }
                         plantDef = plants.RandomElementByWeight((ThingDef def) => {
-                            if(!dontFilterPlant && def == DefDatabase<ThingDef>.GetNamed("PlantGrass", true)) {
+                            if(def == DefDatabase<ThingDef>.GetNamed("PlantGrass", true)) {
                                 return 0;
                             }
                             float commonality = biome.CommonalityOfPlant(def);
-                            if(!dontFilterPlant && commonality >= maxCommonality) {
+                            if(!dontFilterSpeciality && commonality >= maxCommonalityOfPlant) {
                                 return 0;
                             }
                             return commonality;

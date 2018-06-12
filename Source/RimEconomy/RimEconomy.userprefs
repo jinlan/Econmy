@@ -4,10 +4,6 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="RimEconomy\RimEconomyWorldManager.cs">
-    <Files>
-      <File FileName="RimEconomy\RimEconomyWorldManager.cs" Line="88" Column="42" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MultiItemStartupConfigurations />
 </Properties>
