@@ -4,6 +4,24 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="RimEconomy\RimEconomy.cs">
+    <Files>
+      <File FileName="RimEconomy\RimEconomy.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="RimEconomy" expanded="True">
+            <Node name="RimEconomy" expanded="True">
+              <Node name="RimEconomy" expanded="True">
+                <Node name="Def" expanded="True" />
+                <Node name="RimEconomy.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
 </Properties>
